@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
 
 const RegisterForm = () => {
+  // Dropdown’da listelenecek sınıflar
+  const classOptions = [
+    "Elektro Teknik Zabiti",
+    "General Operator",
+    "ROC",
+    "Sınırlı Baş Makinist",
+    "Stcw",
+    "Uzak yol 2.Mühendis",
+    "Uzak yol Başmuhendis",
+    "Uzak yol Kaptan",
+    "Uzak yol Vardiya Zabiti",
+    "Yat Kaptanı Sınırsız"
+  ];
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    userClass: '' // yeni eklenen alan
   });
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name) {
       newErrors.name = 'Ad Soyad gereklidir';
     }
@@ -37,6 +52,11 @@ const RegisterForm = () => {
       newErrors.phoneNumber = 'Telefon numarası gereklidir';
     }
 
+    // userClass boş geçilmemişse kontrol
+    if (!formData.userClass) {
+      newErrors.userClass = 'Lütfen bir sınıf seçiniz';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -44,12 +64,30 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
+      // Form verilerini backend’e gönder
       console.log('Form gönderildi:', formData);
+
+      // fetch veya axios ile örnek istek (POST)
+      /*
+      fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then((res) => res.json())
+      .then((data) => {
+         console.log('Kayıt başarılı:', data);
+      })
+      .catch((error) => {
+         console.error('Kayıt hatası:', error);
+      });
+      */
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Ad Soyad */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
           Ad Soyad
@@ -58,12 +96,13 @@ const RegisterForm = () => {
           type="text"
           id="name"
           value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deniz-500 focus:ring-deniz-500"
         />
         {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
       </div>
 
+      {/* E-posta */}
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           E-posta Adresi
@@ -72,12 +111,13 @@ const RegisterForm = () => {
           type="email"
           id="email"
           value={formData.email}
-          onChange={(e) => setFormData({...formData, email: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deniz-500 focus:ring-deniz-500"
         />
         {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
       </div>
 
+      {/* Telefon Numarası */}
       <div>
         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
           Telefon Numarası
@@ -86,12 +126,13 @@ const RegisterForm = () => {
           type="tel"
           id="phoneNumber"
           value={formData.phoneNumber}
-          onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deniz-500 focus:ring-deniz-500"
         />
         {errors.phoneNumber && <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>}
       </div>
 
+      {/* Şifre */}
       <div>
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Şifre
@@ -100,12 +141,13 @@ const RegisterForm = () => {
           type="password"
           id="password"
           value={formData.password}
-          onChange={(e) => setFormData({...formData, password: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deniz-500 focus:ring-deniz-500"
         />
         {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
       </div>
 
+      {/* Şifre Tekrar */}
       <div>
         <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
           Şifre Tekrar
@@ -114,10 +156,31 @@ const RegisterForm = () => {
           type="password"
           id="confirmPassword"
           value={formData.confirmPassword}
-          onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deniz-500 focus:ring-deniz-500"
         />
         {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>}
+      </div>
+
+      {/* Sınıfınızı Seçiniz */}
+      <div>
+        <label htmlFor="userClass" className="block text-sm font-medium text-gray-700">
+          Sınıfınızı Seçiniz
+        </label>
+        <select
+          id="userClass"
+          value={formData.userClass}
+          onChange={(e) => setFormData({ ...formData, userClass: e.target.value })}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deniz-500 focus:ring-deniz-500"
+        >
+          <option value="">Lütfen bir sınıf seçiniz</option>
+          {classOptions.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        {errors.userClass && <p className="mt-1 text-sm text-red-600">{errors.userClass}</p>}
       </div>
 
       <button
@@ -136,4 +199,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm; 
+export default RegisterForm;

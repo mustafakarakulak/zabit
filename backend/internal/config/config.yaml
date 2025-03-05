@@ -1,0 +1,6 @@
+server_port: "8080"
+db_host: "localhost"
+db_port: "5432"
+db_user: "zabit"
+db_password: "123"
+db_name: "zabit"
